@@ -21,7 +21,7 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 	}
 
 	// check if user exists before create new one
-	user, err := h.repository.GetUserByEmail(userPayload.Email)
+	user, err := h.repository.FindUserByEmail(userPayload.Email)
 	fmt.Println("routes: ", user, err, userPayload.Email)
 	if (user != nil) {
 		utils.ApiError(c, http.StatusBadRequest, "user already with same email")
@@ -32,6 +32,7 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 
 	if err != nil {
 		utils.ApiError(c, http.StatusBadRequest, "password hashing problem")
+		return
 	}
 
 	userPayload.Password = pass
@@ -72,7 +73,7 @@ func (h *Handler) HandleLogin(c *gin.Context) {
 		return
 	}
 
-	user, err := h.repository.GetUserByEmail(loginPayload.Email)
+	user, err := h.repository.FindUserByEmail(loginPayload.Email)
 
 	if err != nil {
 		utils.ApiError(c, http.StatusBadRequest, "user not found")

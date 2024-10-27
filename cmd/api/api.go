@@ -47,7 +47,7 @@ func (s *APIServer) Run() {
 	{
 		// v1.Use()
 		authHandler.Routes(v1.Group("/auth"))
-		userHandler.Routes(v1.Group("/user"))
+		userHandler.Routes(v1.Group("/users"))
 	}
 
 	router.NoRoute(func(c *gin.Context) {

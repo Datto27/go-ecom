@@ -16,7 +16,7 @@ func InitDB(connStr string) *gorm.DB {
 		log.Fatalln(err)
 	}
 	
-	db.Debug().AutoMigrate(&models.User{})
+	db.Debug().AutoMigrate(&models.User{}, &models.Product{})
 	
 	return db
 }

@@ -9,8 +9,9 @@ import (
 
 type UserRepository interface {
 	CreateUser(data dtos.RegisterUserDto) error
-	GetUserByEmail(email string) (*models.User, error)
-	GetUserById(id string) (*models.User, error)
+	FindUserByEmail(email string) (*models.User, error)
+	FindUserById(id uuid.UUID) (*models.User, error)
+	FindUsers(skip int, limit int) ([]models.User, error)
 }
 
 type Repository struct {
@@ -39,8 +40,7 @@ func (r *Repository) CreateUser(data dtos.RegisterUserDto) error {
 	return nil
 }
 
-func (r *Repository) GetUserByEmail(email string) (*models.User, error) {
-	// var user models.User
+func (r *Repository) FindUserByEmail(email string) (*models.User, error) {
 	var user models.User
 
 	// Use the Where clause to find the user by email
@@ -60,7 +60,34 @@ func (r *Repository) GetUserByEmail(email string) (*models.User, error) {
 	}, nil
 }
 
-func (r *Repository) GetUserById(email string) (*models.User, error) {
+func (r *Repository) FindUserById(id uuid.UUID) (*models.User, error) {
 	var user models.User
-	return &user, nil
+
+	// Use the Where clause to find the user by email
+	result := r.db.Where("id = ?", id).Take(&user)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return  &models.User{
+		ID:        user.ID,
+		Email:     user.Email,
+		Password:  user.Password,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		CreatedAt: user.CreatedAt,
+	}, nil
+}
+
+func (r *Repository) FindUsers(skip int, limit int) ([]models.User, error) {
+	var users []models.User
+
+	result := r.db.Find(&users)
+
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return users, nil
 }
