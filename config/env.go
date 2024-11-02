@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -34,7 +33,6 @@ func initConfig() Config {
 
 func getEnv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
-		fmt.Println("env: " +  value)
 		return value
 	}
 

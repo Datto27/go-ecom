@@ -9,17 +9,17 @@ import (
 	"github.com/google/uuid"
 )
 
-func (h *Handler) GetAllUsers(c *gin.Context) {
+func (h *Handler) GetUsers(c *gin.Context) {
 	skip, err := strconv.Atoi(c.DefaultQuery("skip", "0"))
 	if err != nil {
-		utils.ApiError(c, http.StatusBadRequest, "invalid age value")
+		utils.ApiError(c, http.StatusBadRequest, "invalid skip value")
 		return
 	}
 
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 
 	if err != nil {
-		utils.ApiError(c, http.StatusBadRequest, "invalid age value")
+		utils.ApiError(c, http.StatusBadRequest, "invalid limit value")
 		return
 	}
 	

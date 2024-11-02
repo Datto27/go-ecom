@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -26,8 +25,6 @@ func JWTMiddleware() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
-		fmt.Println(tokenStr)
 
 		token, err := utils.ParseJWT(tokenStr)
 

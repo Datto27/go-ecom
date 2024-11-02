@@ -8,9 +8,9 @@ import (
 )
 
 type UserRepository interface {
-	CreateUser(data dtos.RegisterUserDto) error
+	CreateUser(data dtos.RegisterUserDto) (*models.User, error)
 	FindUserByEmail(email string) (*models.User, error)
-	FindUserById(id uuid.UUID) (*models.User, error)
+	FindUserById(id uuid.UUID) (*dtos.GetUserDto, error)
 	FindUsers(skip int, limit int) ([]models.User, error)
 }
 
@@ -23,7 +23,7 @@ func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) CreateUser(data dtos.RegisterUserDto) error {
+func (r *Repository) CreateUser(data dtos.RegisterUserDto) (*models.User, error){
 	user := &models.User{
 		ID: uuid.New(),
 		Email: data.Email,
@@ -34,10 +34,10 @@ func (r *Repository) CreateUser(data dtos.RegisterUserDto) error {
 	result := r.db.Create(user);
 
 	if result.Error != nil {
-		return result.Error
+		return nil, result.Error
 	}
 
-	return nil
+	return user, nil
 }
 
 func (r *Repository) FindUserByEmail(email string) (*models.User, error) {
@@ -60,22 +60,41 @@ func (r *Repository) FindUserByEmail(email string) (*models.User, error) {
 	}, nil
 }
 
-func (r *Repository) FindUserById(id uuid.UUID) (*models.User, error) {
+func (r *Repository) FindUserById(id uuid.UUID) (*dtos.GetUserDto, error) {
 	var user models.User
 
 	// Use the Where clause to find the user by email
-	result := r.db.Where("id = ?", id).Take(&user)
+	// result := r.db.Where("id = ?", id).Take(&user)
 
-	if result.Error != nil {
-		return nil, result.Error
+	// if result.Error != nil {
+	// 	return nil, result.Error
+	// }
+
+	err := r.db.Preload("Products", func(db *gorm.DB) *gorm.DB {
+			return db.Select("ID", "Name", "Price", "Image", "UserID")
+		}).First(&user, "id = ?", id).Error
+
+	if err != nil {
+    return nil, err
 	}
 
-	return  &models.User{
+	products := make([]dtos.ProductDto, len(user.Products))
+	for i, product := range user.Products {
+			products[i] = dtos.ProductDto{
+					ID: product.ID,
+					Name: product.Name,
+					Price: product.Price,
+					Image: product.Image,
+			}
+	}
+
+	return  &dtos.GetUserDto{
 		ID:        user.ID,
 		Email:     user.Email,
 		Password:  user.Password,
 		FirstName: user.FirstName,
 		LastName:  user.LastName,
+		Products:  products,
 		CreatedAt: user.CreatedAt,
 	}, nil
 }

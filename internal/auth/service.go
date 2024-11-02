@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -15,14 +14,12 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 	var userPayload dtos.RegisterUserDto
 
 	if err := c.ShouldBindJSON(&userPayload); err != nil {
-		fmt.Println("body validation fail")
 		utils.ApiError(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
 	// check if user exists before create new one
 	user, err := h.repository.FindUserByEmail(userPayload.Email)
-	fmt.Println("routes: ", user, err, userPayload.Email)
 	if (user != nil) {
 		utils.ApiError(c, http.StatusBadRequest, "user already with same email")
 		return
@@ -37,14 +34,14 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 
 	userPayload.Password = pass
 	
-	err = h.repository.CreateUser(userPayload)
+	user, err = h.repository.CreateUser(userPayload)
 
 	if err != nil {
 		utils.ApiError(c, http.StatusBadRequest, "user creation problem")
 		return
 	}
 
-	token, err := utils.GenerateJWT(userPayload.Email)
+	token, err := utils.GenerateJWT(user.ID)
 
 	if err != nil {
 		utils.ApiError(c, http.StatusBadRequest, "token generation error")
@@ -87,7 +84,7 @@ func (h *Handler) HandleLogin(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateJWT(loginPayload.Email)
+	token, err := utils.GenerateJWT(user.ID)
 
 	if err != nil {
 		utils.ApiError(c, http.StatusBadRequest, "token generation error")
@@ -97,7 +94,7 @@ func (h *Handler) HandleLogin(c *gin.Context) {
 	c.SetCookie(
 		"jwt",
 		token,
-		int(time.Now().Add(time.Hour * 24).Unix()),
+		int(time.Now().Add(time.Hour * 24 * 7).Unix()),
 		"/",
 		"",
 		true,

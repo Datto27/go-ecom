@@ -13,10 +13,14 @@ func InitDB(connStr string) *gorm.DB {
 	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalln("db error: ", err)
 	}
 	
-	db.Debug().AutoMigrate(&models.User{}, &models.Product{})
+	merr := db.Debug().AutoMigrate(&models.User{}, &models.Product{})
+
+	if merr != nil {
+		log.Fatalln("migration error: ", merr)
+	}
 	
 	return db
 }

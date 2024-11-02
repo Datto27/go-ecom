@@ -6,6 +6,7 @@ import (
 	"github.com/datto27/goecom/config"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -31,10 +32,10 @@ type Claims struct {
 
 var jwtSecret = []byte(config.ENVS.JWT_SECRET)
 
-func GenerateJWT(email string) (string, error) {
+func GenerateJWT(id uuid.UUID) (string, error) {
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": email, 
+		"sub": id, 
 		"exp": time.Now().Add(time.Hour * 24).Unix(), // Expires in 24 hours
 	})
 	return claims.SignedString([]byte(jwtSecret))

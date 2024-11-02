@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/datto27/goecom/internal/auth"
+	"github.com/datto27/goecom/internal/product"
 	"github.com/datto27/goecom/internal/user"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
@@ -37,10 +38,12 @@ func (s *APIServer) Run() {
 
 	// init repositories
 	userRepository := user.NewRepository(s.db)
+	productRepository := product.NewRepository(s.db)
 
 	// init handlers
 	userHandler := user.NewHandler(userRepository)
 	authHandler := auth.NewHandler(userRepository)
+	productHandler := product.NewHandler(productRepository)
 
 	// group routes. in this case path will be /api/v1/auth....
 	v1 := router.Group("/api/v1")
@@ -48,6 +51,7 @@ func (s *APIServer) Run() {
 		// v1.Use()
 		authHandler.Routes(v1.Group("/auth"))
 		userHandler.Routes(v1.Group("/users"))
+		productHandler.Routes(v1.Group("/products"))
 	}
 
 	router.NoRoute(func(c *gin.Context) {
