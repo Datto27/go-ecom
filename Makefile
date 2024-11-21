@@ -6,5 +6,5 @@ run: build
 	@./bin/goecom
 
 test:
-	@got test -v ./..
+	@go test -v ./..
 
