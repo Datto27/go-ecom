@@ -14,7 +14,6 @@ func NewHandler(respository UserRepository) * Handler {
 }
 
 func (h *Handler) Routes(g *gin.RouterGroup) {
-	g.Use(middlewares.JWTMiddleware())
 	g.GET("/", h.GetUsers)
-	g.GET("/:userId", h.GetUserById)
+	g.GET("/:userId", middlewares.JWTMiddleware(), h.GetUserById)
 }

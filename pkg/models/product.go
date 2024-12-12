@@ -12,7 +12,7 @@ type Product struct {
 	UserID uuid.UUID `gorm:"not null" json:"userId"`
 	Name string `gorm:"not null" json:"name"`
 	Description string `json:"description"`
-	Image string `json:"image"`
+	Image *string `json:"image"`
 	Price float64 `gorm:"not null" json:"price"`
 	Quantity int `gorm:"not null" json:"quantity"`
 	UpdatedAt time.Time `json:"updatedAt"`

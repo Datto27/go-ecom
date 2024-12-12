@@ -17,10 +17,10 @@ func NewHandler(r ProductRepository) *Handler {
 }
 
 func (h *Handler) Routes(g *gin.RouterGroup) {
-	g.Use(middlewares.JWTMiddleware())
-	g.POST("/", h.AddProduct)
+	g.POST("/", middlewares.JWTMiddleware(), h.AddProduct)
 	g.GET("/:productId", h.GetPoroductById)
 	g.GET("/", h.GetPoroducts)
-	g.PATCH("/:productId", h.UpdateProduct)
-	g.DELETE("/:productId", h.DeleteProduct)
+	g.PATCH("/:productId", middlewares.JWTMiddleware(), h.UpdateProduct)
+	g.PATCH("/update-image/:productId", middlewares.JWTMiddleware(), h.UpdateProductImage)
+	g.DELETE("/:productId", middlewares.JWTMiddleware(), h.DeleteProduct)
 }

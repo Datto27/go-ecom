@@ -3,6 +3,7 @@ package product
 import (
 	"fmt"
 	"net/http"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -15,14 +16,27 @@ import (
 
 func (h *Handler) AddProduct(c *gin.Context) {
 	var productPayload dtos.CreateProductDto
+	var newId = uuid.New()
 
-	if err := c.ShouldBindJSON(&productPayload); err != nil {
-		fmt.Println("service: ", err)
+	if err := c.ShouldBind(&productPayload); err != nil {
 		utils.ApiError(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	err := h.repository.CreateProduct(productPayload)
+	file, err := c.FormFile("image")
+	var imagePath string
+	if err != nil || file == nil {
+		productPayload.Image = nil
+	} else {
+		// save file to a local directory
+		extension := strings.ToLower(filepath.Ext(file.Filename))
+		filePath := fmt.Sprintf("uploads/%s%s", newId, extension)
+		if err := c.SaveUploadedFile(file, filePath); err != nil {
+			imagePath = filePath;
+		}
+	}
+
+	err = h.repository.CreateProduct(newId, productPayload, imagePath)
 
 	if err != nil {
 		utils.ApiError(c, http.StatusBadRequest, err.Error())
@@ -133,4 +147,48 @@ func (h *Handler) DeleteProduct(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "product deleted successfully"})
+}
+
+func (h *Handler) UpdateProductImage(c *gin.Context) {
+	var productPayload dtos.UpdateProductImageDto
+
+	productId, err := uuid.Parse(c.Param("productId"))
+	if err != nil {
+		utils.ApiError(c, http.StatusBadRequest, "incorect id formation")
+		return
+	}
+	
+	if err := c.ShouldBind(&productPayload); err != nil {
+		utils.ApiError(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	userId, err := uuid.Parse(productPayload.UserID)
+	if err != nil {
+		utils.ApiError(c, http.StatusBadRequest, "incorect userId")
+		return
+	}
+
+	var imagePath string
+	file, err := c.FormFile("image")
+	if err != nil || file == nil {
+		productPayload.Image = nil
+	} else {
+		// save file to a local directory
+		extension := strings.ToLower(filepath.Ext(file.Filename))
+		filePath := fmt.Sprintf("uploads/%s%s", productId, extension)
+		if err := c.SaveUploadedFile(file, filePath); err != nil {
+			imagePath = filePath;
+		}
+	}
+
+	err = h.repository.UpdateProductImage(productId, userId, imagePath)
+
+	if err != nil {
+	  utils.ApiError(c, http.StatusBadRequest, "could not update product image")
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"message": "image update successfully"})
+		return
+	}
 }
