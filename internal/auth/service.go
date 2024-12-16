@@ -9,7 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
+// Register Users
+// @Summery Register Users
+// @Description Add new users
+// @Tags Auth
+// @Produce json
+// @Param user body dtos.RegisterUserDto true "User login data"
+// @Success 200
+// @Router /api/v1/auth/register [post]
 func (h *Handler) HandleRegister(c *gin.Context) {
 	var userPayload dtos.RegisterUserDto
 
@@ -61,7 +68,15 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "success"})
 }
- 
+
+// Login
+// @Summery Login Users
+// @Description Authorize created user
+// @Tags Auth
+// @Produce json
+// @Param user body dtos.LoginUserDto true "User registration data"
+// @Success 200
+// @Router /api/v1/auth/login [post]
 func (h *Handler) HandleLogin(c *gin.Context) {
 	var loginPayload dtos.LoginUserDto
 

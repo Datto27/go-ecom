@@ -9,6 +9,8 @@
 /> docker run --rm -p 4000:4000 myapp 
 Or
 /> docker-compose up
+#  docker-compose up -d --force-recreate
+/> swag init
 ```
 
 ### Description
@@ -18,12 +20,13 @@ Or
   - Secure some routes and validate them with jwt provided from cookies
 - Products
   - All user can create product and manage them (crud operations)
+- API documentation: localhost:4000/swagger/index.html
+
 
 ## Deployment links
 ...
 
-# TODO 
-- image upload
+# TODO
 - add cart feature
 - add orders feature
 - reverse proxy

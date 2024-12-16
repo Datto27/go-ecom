@@ -14,6 +14,15 @@ import (
 	"github.com/google/uuid"
 )
 
+// Add Product
+// @Summery Add Product
+// @Description Add new product
+// @Tags Product
+// @Accept multipart/form-data
+// @Param product body dtos.CreateProductDoc true "Product create data"
+// @Success 200
+// @Failure 404
+// @Router /api/v1/products [post]
 func (h *Handler) AddProduct(c *gin.Context) {
 	var productPayload dtos.CreateProductDto
 	var newId = uuid.New()
@@ -46,6 +55,15 @@ func (h *Handler) AddProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "successfully created"})
 }
 
+// Get Product
+// @Summery Get Product
+// @Description Get Product Details
+// @Tags Product
+// @Produce json
+// @Param productId path string true "Product ID"
+// @Success 200
+// @Failure 404
+// @Router /api/v1/products/{productId} [get]
 func (h *Handler) GetPoroductById(c *gin.Context) {
 	productId, err := uuid.Parse(c.Param("productId"))
 
@@ -64,6 +82,16 @@ func (h *Handler) GetPoroductById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"product": product})
 }
 
+// Get Products
+// @Summery Get Products
+// @Description Get Products
+// @Tags Product
+// @Produce json
+// @Param skip query int true "Number of records to skip" default(0)
+// @Param limit query int true "Number of records to fetch" default(10)
+// @Success 200
+// @Failure 404
+// @Router /api/v1/products [get]
 func (h *Handler) GetPoroducts(c *gin.Context) {
 	skip, err := strconv.Atoi(c.DefaultQuery("skip", "0"))
 	if err != nil {
@@ -88,6 +116,16 @@ func (h *Handler) GetPoroducts(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"products": users})
 }
 
+// Update Product
+// @Summery Update Product
+// @Description Update product details
+// @Tags Product
+// @Produce json
+// @Param productId path string true "Product ID"
+// @Param product body dtos.UpdateProductDto true "Product update data"
+// @Success 200
+// @Failure 404
+// @Router /api/v1/products/{productId} [patch]
 func (h *Handler) UpdateProduct(c *gin.Context) {
 	_, err := uuid.Parse(c.Param("productId"))
 	if err != nil {
@@ -121,6 +159,15 @@ func (h *Handler) UpdateProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "product updated successfully"})
 }
 
+// Delete Product
+// @Summery Delete Product
+// @Description Delete product
+// @Tags Product
+// @Produce json
+// @Param productId path string true "Product ID"
+// @Success 200
+// @Failure 404
+// @Router /api/v1/products/{productId} [delete]
 func (h *Handler) DeleteProduct(c *gin.Context) {
 	productId, err := uuid.Parse(c.Param("productId"))
 
@@ -149,6 +196,16 @@ func (h *Handler) DeleteProduct(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "product deleted successfully"})
 }
 
+// Update Product Image
+// @Summery Update Product Image
+// @Description Update product details Image
+// @Tags Product
+// @Accept multipart/form-data
+// @Param productId path string true "Product ID"
+// @Param data body dtos.UpdateProductImageDoc true "Product image update with file"
+// @Success 200
+// @Failure 404
+// @Router /api/v1/products/update-image/{productId} [patch]
 func (h *Handler) UpdateProductImage(c *gin.Context) {
 	var productPayload dtos.UpdateProductImageDto
 

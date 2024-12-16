@@ -1,0 +1,325 @@
+basePath: /api/v1
+definitions:
+  dtos.CreateProductDoc:
+    properties:
+      description:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      userId:
+        type: string
+    required:
+    - name
+    - price
+    - quantity
+    - userId
+    type: object
+  dtos.GetUserDto:
+    properties:
+      createdAt:
+        type: string
+      emial:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      passowrd:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/dtos.ProductDto'
+        type: array
+      updatedAt:
+        type: string
+    type: object
+  dtos.LoginUserDto:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dtos.ProductDto:
+    properties:
+      id:
+        type: string
+      image:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  dtos.RegisterUserDto:
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - firstName
+    - lastName
+    - password
+    type: object
+  dtos.UpdateProductDto:
+    properties:
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      quantity:
+        type: integer
+      userId:
+        type: string
+    required:
+    - id
+    - name
+    - price
+    - quantity
+    - userId
+    type: object
+  dtos.UpdateProductImageDoc:
+    properties:
+      image:
+        description: Represents the file name
+        example: file.jpg
+        type: string
+      productId:
+        example: "12345"
+        type: string
+    required:
+    - productId
+    type: object
+host: localhost:4000
+info:
+  contact: {}
+  description: Golang + Gin api with basic ecomerce routes
+  license:
+    name: Apache 2.0
+  title: GoEcom
+  version: "1.0"
+paths:
+  /api/v1/auth/login:
+    post:
+      description: Authorize created user
+      parameters:
+      - description: User registration data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.LoginUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Auth
+  /api/v1/auth/register:
+    post:
+      description: Add new users
+      parameters:
+      - description: User login data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.RegisterUserDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - Auth
+  /api/v1/products:
+    get:
+      description: Get Products
+      parameters:
+      - default: 0
+        description: Number of records to skip
+        in: query
+        name: skip
+        required: true
+        type: integer
+      - default: 10
+        description: Number of records to fetch
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      tags:
+      - Product
+    post:
+      consumes:
+      - multipart/form-data
+      description: Add new product
+      parameters:
+      - description: Product create data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateProductDoc'
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      tags:
+      - Product
+  /api/v1/products/{productId}:
+    delete:
+      description: Delete product
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      tags:
+      - Product
+    get:
+      description: Get Product Details
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      tags:
+      - Product
+    patch:
+      description: Update product details
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: string
+      - description: Product update data
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UpdateProductDto'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      tags:
+      - Product
+  /api/v1/products/update-image/{productId}:
+    patch:
+      consumes:
+      - multipart/form-data
+      description: Update product details Image
+      parameters:
+      - description: Product ID
+        in: path
+        name: productId
+        required: true
+        type: string
+      - description: Product image update with file
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.UpdateProductImageDoc'
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      tags:
+      - Product
+  /api/v1/users/:
+    get:
+      description: Get users list
+      parameters:
+      - default: 0
+        description: Number of records to skip
+        in: query
+        name: skip
+        required: true
+        type: integer
+      - default: 10
+        description: Number of records to fetch
+        in: query
+        name: limit
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      tags:
+      - User
+  /api/v1/users/{userId}:
+    get:
+      description: Get user details
+      parameters:
+      - description: User ID
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dtos.GetUserDto'
+        "404":
+          description: Not Found
+      tags:
+      - User
+swagger: "2.0"

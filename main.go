@@ -1,5 +1,13 @@
 package main
 
+// @title           GoEcom
+// @version         1.0
+// @description     Golang + Gin api with basic ecomerce routes
+
+// @license.name  Apache 2.0
+
+// @host      localhost:4000
+// @BasePath  /api/v1
 import (
 	"fmt"
 

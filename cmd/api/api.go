@@ -4,10 +4,13 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/datto27/goecom/docs"
 	"github.com/datto27/goecom/internal/auth"
 	"github.com/datto27/goecom/internal/product"
 	"github.com/datto27/goecom/internal/user"
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"gorm.io/gorm"
 )
 
@@ -35,6 +38,7 @@ func (s *APIServer) Run() {
 			"message": "pong",
 		})
 	})
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 
 	// init repositories
 	userRepository := user.NewRepository(s.db)
