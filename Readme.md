@@ -12,6 +12,10 @@ Or
 #  docker-compose up -d --force-recreate
 /> swag init
 ```
+- Build with vendor (for deployment)
+```bash
+/> go build -o go-ecom -mod=vendor main.go
+```
 
 ### Description
 - User Authentication and Registration
