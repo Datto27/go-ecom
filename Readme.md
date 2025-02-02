@@ -28,10 +28,9 @@ Or
 
 
 ## Deployment links
-...
+https://goecom.52.59.241.244.nip.io/swagger/index.html
 
 # TODO
 - add cart feature
 - add orders feature
 - reverse proxy
-- swagger documentation
