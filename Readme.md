@@ -28,7 +28,7 @@ Or
 
 
 ## Deployment links
-https://goecom.52.59.241.244.nip.io/swagger/index.html
+Documentation - https://goecom.35.171.20.164.nip.io/swagger/index.html
 
 # TODO
 - add cart feature
