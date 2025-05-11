@@ -11,7 +11,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/datto27/goecom/cmd/api"
+	"github.com/datto27/goecom/api"
 	"github.com/datto27/goecom/config"
 	"github.com/datto27/goecom/db"
 )

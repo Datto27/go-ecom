@@ -6,6 +6,9 @@ build:
 run: build
 	@./bin/goecom
 
+run-dev:
+	@air
+
 test:
 	@go test -v ./..
 
