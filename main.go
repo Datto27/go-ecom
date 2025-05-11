@@ -21,6 +21,6 @@ func main() {
 
 	db := db.InitDB(connStr)
 
-	server := api.NewAPIServer(":4000", db)
+	server := api.NewAPIServer(":8080", db)
 	server.Run()
 }

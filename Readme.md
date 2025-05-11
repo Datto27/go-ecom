@@ -17,6 +17,14 @@ Or
 /> go build -o go-ecom -mod=vendor main.go
 ```
 
+# Use vendor for used packages
+```
+/> go mod tidy
+/> go mod vendor
+/> go build -mod=vendor
+/> go run -mod=vendor .
+```
+
 ### Description
 - User Authentication and Registration
   - New users can register to add new products
