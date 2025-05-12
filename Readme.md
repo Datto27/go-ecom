@@ -9,7 +9,17 @@
 - JWT - JSON web token authorization
 - Docker - Application containerization
 
-# Run application
+### Description
+
+- User Authentication and Registration
+  - New users can register to add new products
+  - Authorize users with jwt
+  - Secure some routes and validate them with jwt provided from cookies
+- Products
+  - All user can create product and manage them (crud operations)
+- API documentation: localhost:4000/swagger/index.html
+
+## Run application
 
 ```
 # run locally
@@ -37,16 +47,6 @@ Or
 /> go build -mod=vendor
 /> go run -mod=vendor .
 ```
-
-### Description
-
-- User Authentication and Registration
-  - New users can register to add new products
-  - Authorize users with jwt
-  - Secure some routes and validate them with jwt provided from cookies
-- Products
-  - All user can create product and manage them (crud operations)
-- API documentation: localhost:4000/swagger/index.html
 
 ## Deployment links
 
