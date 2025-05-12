@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/datto27/goecom/pkg/dtos"
-	"github.com/datto27/goecom/pkg/models"
+	"github.com/datto27/goecom/microservices/core/dtos"
+	"github.com/datto27/goecom/microservices/core/models"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
@@ -23,15 +23,15 @@ func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) CreateUser(data dtos.RegisterUserDto) (*models.User, error){
+func (r *Repository) CreateUser(data dtos.RegisterUserDto) (*models.User, error) {
 	user := &models.User{
-		ID: uuid.New(),
-		Email: data.Email,
+		ID:        uuid.New(),
+		Email:     data.Email,
 		FirstName: data.FirstName,
-		LastName: data.LastName,
-		Password: data.Password,
+		LastName:  data.LastName,
+		Password:  data.Password,
 	}
-	result := r.db.Create(user);
+	result := r.db.Create(user)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -50,7 +50,7 @@ func (r *Repository) FindUserByEmail(email string) (*models.User, error) {
 		return nil, result.Error
 	}
 
-	return  &models.User{
+	return &models.User{
 		ID:        user.ID,
 		Email:     user.Email,
 		Password:  user.Password,
@@ -71,24 +71,24 @@ func (r *Repository) FindUserById(id uuid.UUID) (*dtos.GetUserDto, error) {
 	// }
 
 	err := r.db.Preload("Products", func(db *gorm.DB) *gorm.DB {
-			return db.Select("ID", "Name", "Price", "Image", "UserID")
-		}).First(&user, "id = ?", id).Error
+		return db.Select("ID", "Name", "Price", "Image", "UserID")
+	}).First(&user, "id = ?", id).Error
 
 	if err != nil {
-    return nil, err
+		return nil, err
 	}
 
 	products := make([]dtos.ProductDto, len(user.Products))
 	for i, product := range user.Products {
-			products[i] = dtos.ProductDto{
-					ID: product.ID,
-					Name: product.Name,
-					Price: product.Price,
-					Image: product.Image,
-			}
+		products[i] = dtos.ProductDto{
+			ID:    product.ID,
+			Name:  product.Name,
+			Price: product.Price,
+			Image: product.Image,
+		}
 	}
 
-	return  &dtos.GetUserDto{
+	return &dtos.GetUserDto{
 		ID:        user.ID,
 		Email:     user.Email,
 		Password:  user.Password,

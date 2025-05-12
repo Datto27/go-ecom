@@ -3,7 +3,7 @@ package auth
 import (
 	"net/http"
 
-	"github.com/datto27/goecom/internal/user"
+	"github.com/datto27/goecom/microservices/core/internal/user"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,10 +11,9 @@ type Handler struct {
 	repository user.UserRepository
 }
 
-func NewHandler(respository user.UserRepository) * Handler {
+func NewHandler(respository user.UserRepository) *Handler {
 	return &Handler{repository: respository}
 }
-
 
 func (h *Handler) Routes(g *gin.RouterGroup) {
 	g.GET("/", h.test)

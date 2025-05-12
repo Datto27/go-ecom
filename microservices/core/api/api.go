@@ -4,10 +4,9 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/datto27/goecom/docs"
-	"github.com/datto27/goecom/internal/auth"
-	"github.com/datto27/goecom/internal/product"
-	"github.com/datto27/goecom/internal/user"
+	"github.com/datto27/goecom/microservices/core/internal/auth"
+	"github.com/datto27/goecom/microservices/core/internal/product"
+	"github.com/datto27/goecom/microservices/core/internal/user"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -16,13 +15,13 @@ import (
 
 type APIServer struct {
 	port string
-	db *gorm.DB
+	db   *gorm.DB
 }
 
 func NewAPIServer(port string, db *gorm.DB) *APIServer {
-	return &APIServer {
+	return &APIServer{
 		port: port,
-		db: db,
+		db:   db,
 	}
 }
 

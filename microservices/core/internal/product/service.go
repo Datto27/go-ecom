@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	utils "github.com/datto27/goecom/pkg"
-	"github.com/datto27/goecom/pkg/dtos"
+	"github.com/datto27/goecom/microservices/core/dtos"
+	"github.com/datto27/goecom/microservices/core/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
@@ -41,7 +41,7 @@ func (h *Handler) AddProduct(c *gin.Context) {
 		extension := strings.ToLower(filepath.Ext(file.Filename))
 		filePath := fmt.Sprintf("uploads/%s%s", newId, extension)
 		if err := c.SaveUploadedFile(file, filePath); err != nil {
-			imagePath = filePath;
+			imagePath = filePath
 		}
 	}
 
@@ -105,7 +105,7 @@ func (h *Handler) GetPoroducts(c *gin.Context) {
 		utils.ApiError(c, http.StatusBadRequest, "invalid limit value")
 		return
 	}
-	
+
 	users, err := h.repository.FindProducts(skip, limit)
 
 	if err != nil {
@@ -214,7 +214,7 @@ func (h *Handler) UpdateProductImage(c *gin.Context) {
 		utils.ApiError(c, http.StatusBadRequest, "incorect id formation")
 		return
 	}
-	
+
 	if err := c.ShouldBind(&productPayload); err != nil {
 		utils.ApiError(c, http.StatusBadRequest, err.Error())
 		return
@@ -235,14 +235,14 @@ func (h *Handler) UpdateProductImage(c *gin.Context) {
 		extension := strings.ToLower(filepath.Ext(file.Filename))
 		filePath := fmt.Sprintf("uploads/%s%s", productId, extension)
 		if err := c.SaveUploadedFile(file, filePath); err != nil {
-			imagePath = filePath;
+			imagePath = filePath
 		}
 	}
 
 	err = h.repository.UpdateProductImage(productId, userId, imagePath)
 
 	if err != nil {
-	  utils.ApiError(c, http.StatusBadRequest, "could not update product image")
+		utils.ApiError(c, http.StatusBadRequest, "could not update product image")
 		return
 	} else {
 		c.JSON(http.StatusOK, gin.H{"message": "image update successfully"})

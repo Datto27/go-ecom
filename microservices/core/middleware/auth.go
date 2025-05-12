@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	utils "github.com/datto27/goecom/pkg"
+	"github.com/datto27/goecom/microservices/core/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -32,7 +32,7 @@ func JWTMiddleware() gin.HandlerFunc {
 			utils.ApiError(c, http.StatusUnauthorized, "invalid token")
 			c.Abort()
 			return
-		}	
+		}
 
 		c.Next()
 	}

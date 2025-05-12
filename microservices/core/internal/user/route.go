@@ -1,7 +1,7 @@
 package user
 
 import (
-	middlewares "github.com/datto27/goecom/middleware"
+	middlewares "github.com/datto27/goecom/microservices/core/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -9,7 +9,7 @@ type Handler struct {
 	repository UserRepository
 }
 
-func NewHandler(respository UserRepository) * Handler {
+func NewHandler(respository UserRepository) *Handler {
 	return &Handler{repository: respository}
 }
 

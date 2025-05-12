@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	utils "github.com/datto27/goecom/pkg"
+	"github.com/datto27/goecom/microservices/core/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -31,7 +31,7 @@ func (h *Handler) GetUsers(c *gin.Context) {
 		utils.ApiError(c, http.StatusBadRequest, "invalid limit value")
 		return
 	}
-	
+
 	users, err := h.repository.FindUsers(skip, limit)
 
 	if err != nil {

@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	utils "github.com/datto27/goecom/pkg"
-	"github.com/datto27/goecom/pkg/dtos"
+	"github.com/datto27/goecom/microservices/core/dtos"
+	"github.com/datto27/goecom/microservices/core/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,7 +27,7 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 
 	// check if user exists before create new one
 	user, err := h.repository.FindUserByEmail(userPayload.Email)
-	if (user != nil) {
+	if user != nil {
 		utils.ApiError(c, http.StatusBadRequest, "user already with same email")
 		return
 	}
@@ -40,7 +40,7 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 	}
 
 	userPayload.Password = pass
-	
+
 	user, err = h.repository.CreateUser(userPayload)
 
 	if err != nil {
@@ -58,13 +58,12 @@ func (h *Handler) HandleRegister(c *gin.Context) {
 	c.SetCookie(
 		"jwt",
 		token,
-		int(time.Now().Add(time.Hour * 24).Unix()),
+		int(time.Now().Add(time.Hour*24).Unix()),
 		"/",
 		"",
 		true,
 		true,
 	)
-
 
 	c.JSON(http.StatusOK, gin.H{"message": "success"})
 }
@@ -109,7 +108,7 @@ func (h *Handler) HandleLogin(c *gin.Context) {
 	c.SetCookie(
 		"jwt",
 		token,
-		int(time.Now().Add(time.Hour * 24 * 7).Unix()),
+		int(time.Now().Add(time.Hour*24*7).Unix()),
 		"/",
 		"",
 		true,

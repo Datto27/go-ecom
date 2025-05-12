@@ -11,9 +11,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/datto27/goecom/api"
-	"github.com/datto27/goecom/config"
-	"github.com/datto27/goecom/db"
+	"github.com/datto27/goecom/microservices/core/api"
+	"github.com/datto27/goecom/microservices/core/db"
+	"github.com/datto27/goecom/shared/config"
 )
 
 func main() {
