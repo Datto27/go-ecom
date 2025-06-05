@@ -11,9 +11,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/datto27/goecom/microservices/core/api"
+	www "github.com/datto27/goecom/microservices/core/cmd"
 	"github.com/datto27/goecom/microservices/core/db"
-	"github.com/datto27/goecom/shared/config"
+	"github.com/datto27/goecom/pkg/config"
 )
 
 func main() {
@@ -21,6 +21,6 @@ func main() {
 
 	db := db.InitDB(connStr)
 
-	server := api.NewAPIServer(":8080", db)
+	server := www.NewAPIServer(":8080", db)
 	server.Run()
 }

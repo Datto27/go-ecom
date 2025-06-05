@@ -1,7 +1,7 @@
 package product
 
 import (
-	middlewares "github.com/datto27/goecom/microservices/core/middleware"
+	middlewares "github.com/datto27/goecom/pkg/middleware"
 	"github.com/gin-gonic/gin"
 )
 
